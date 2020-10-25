@@ -1,0 +1,5 @@
+backend/node_modules
+backend/dist
+backend/tsconfig.tsbuildinfo
+*.log
+.env
