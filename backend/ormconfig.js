@@ -1,6 +1,5 @@
 require('dotenv').config()
-
-console.log('hit')
+const join = require('path').join
 
 module.exports = {
    "type": "postgres",
@@ -12,17 +11,17 @@ module.exports = {
    "synchronize": true,
    "logging": false,
    "entities": [
-      "dist/entity/**/*.js"
+      join(__dirname, 'entity', '**', '*.{ts,js}')
    ],
    "migrations": [
-      "dist/migration/**/*.js"
+      join(__dirname, 'migration', '**', '*.{ts,js}')
    ],
    "subscribers": [
-      "dist/subscriber/**/*.js"
+      join(__dirname, 'subscriber', '**', '*.{ts,js}')
    ],
    "cli": {
-      "entitiesDir": "dist/entity",
-      "migrationsDir": "dist/migration",
-      "subscribersDir": "dist/subscriber"
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
    }
 }

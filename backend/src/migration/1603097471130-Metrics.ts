@@ -7,9 +7,31 @@ export class Metrics1603097471130 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'int',
-          isPrimary: true
+          type: 'uuid',
+          isPrimary: true,
+          generationStrategy: 'uuid',
+          default: 'uuid_generate_v4()',
         },
+        {
+          name: 'activeCases',
+          type: 'int',
+        },
+        {
+          name: 'totalCases',
+          type: 'int'
+        },
+        {
+          name: 'totalDeaths',
+          type: 'int'
+        },
+        {
+          name: 'totalRecovered',
+          type: 'int'
+        },
+        {
+          name: 'date',
+          type: 'date'
+        }
       ]
     }))
   }
