@@ -1,29 +1,32 @@
 {
    "name": "covitrack-backend",
    "version": "1.0.0",
-   "main": "index.js",
+   "main": "dist/index.js",
    "private": true,
    "devDependencies": {
       "@types/express": "^4.17.8",
       "@types/node": "^8.0.29",
+      "@types/numeral": "^0.0.28",
+      "@types/sequelize": "^4.28.9",
+      "@types/validator": "^13.1.0",
       "concurrently": "^5.3.0",
       "dotenv": "^8.2.0",
       "nodemon": "^2.0.5",
-      "typescript": "3.3.3333"
+      "typescript": "^4.0.3"
    },
    "dependencies": {
       "axios": "^0.21.0",
+      "date-fns": "^2.16.1",
       "express": "^4.17.1",
+      "numeral": "^2.0.6",
       "pg": "^8.4.1",
-      "reflect-metadata": "^0.1.10",
-      "ts-node": "^9.0.0",
-      "typeorm": "0.2.28"
+      "pg-hstore": "^2.3.3",
+      "sequelize": "^6.3.5",
+      "sequelize-cli": "^6.2.0"
    },
    "scripts": {
       "build": "tsc",
-      "start": "ts-node src/index.ts",
-      "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
-      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+      "dev": "dotenv concurrently \"tsc -w\" \"nodemon dist/index.js\""
    },
    "nodemonConfig": {
       "ext": "ts,js,json",

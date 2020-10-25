@@ -2,26 +2,31 @@ import dotenv from 'dotenv'
 import 'reflect-metadata'
 import express from 'express'
 import http from 'http'
-import { createConnection } from "typeorm"
 import { loadAndPersist } from './dataflowkitLoader'
+import { database } from './db'
 
 dotenv.config()
 
-createConnection().then(() => {
-  const app = express()
+const app = express()
 
-  app.set("views", "public")
+app.set("views", "public")
 
-  app.get("/*", (req, res) => {
-    loadAndPersist()
-    res.json({ hello: "foo " })
-  })
+const dataQuery = `
+  SELECT a.name,
+         m."activeCases",
+         m.date
+  FROM metrics m
+  JOIN areas a ON m."areaId" = a.id
+  WHERE m.date = (SELECT max(date) FROM metrics)
+`
 
-  const server = http.createServer(app)
-
-  server.listen(process.env.PORT, () => {
-    console.log('running')
-  })
+app.get("/*", async (req, res) => {
+  const [data] = await database.query(dataQuery)
+  res.json(data)
 })
 
+const server = http.createServer(app)
 
+server.listen(process.env.PORT, () => {
+  console.log('running')
+})
