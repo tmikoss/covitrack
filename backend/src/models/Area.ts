@@ -3,6 +3,8 @@ import { database } from '../db'
 
 type AreaKind = 'country' | 'zone'
 
+type Geojson = object
+
 interface AreaAttributes {
   id: string
   name: string
@@ -10,6 +12,7 @@ interface AreaAttributes {
   kind: AreaKind
   population?: number
   continent?: string
+  geography?: Geojson
 }
 
 interface AreaCreationAttributes extends Optional<AreaAttributes, 'id'> {}
@@ -20,6 +23,7 @@ class Area extends Model<AreaAttributes, AreaCreationAttributes> implements Area
   public kind!: AreaKind
   public population!: number
   public continent!: string
+  public geography!: Geojson
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -40,6 +44,7 @@ Area.init(
     kind: DataTypes.TEXT,
     population: DataTypes.BIGINT,
     continent: DataTypes.TEXT,
+    geography: DataTypes.GEOGRAPHY,
   },
   {
     tableName: 'areas',

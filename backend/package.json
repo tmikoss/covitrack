@@ -33,7 +33,8 @@
     "dev": "dotenv concurrently \"tsc -w\" \"nodemon dist/index.js\"",
     "prettify": "prettier --write . ",
     "loadFullData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadFullData()\"",
-    "loadLatestData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadLatestData()\""
+    "loadLatestData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadLatestData()\"",
+    "updateGeography": "dotenv node -e \"require('./dist/geographyLoader.js').updateGeography()\""
   },
   "nodemonConfig": {
     "ext": "ts,js,json",
