@@ -4,7 +4,6 @@ module.exports = {
   up: async (queryInterface: QueryInterface) => {
     await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS pgcrypto')
 
-
     await queryInterface.createTable('areas', {
       id: {
         primaryKey: true,
@@ -16,14 +15,12 @@ module.exports = {
         unique: true,
         type: DataTypes.TEXT,
       },
+      code: DataTypes.TEXT,
       kind: {
         allowNull: false,
         type: DataTypes.TEXT,
       },
-      population: {
-        allowNull: true,
-        type: DataTypes.INTEGER,
-      },
+      population: DataTypes.INTEGER,
       continent: DataTypes.TEXT,
       updatedAt: DataTypes.DATE,
       createdAt: DataTypes.DATE,
@@ -32,5 +29,5 @@ module.exports = {
 
   down: async (queryInterface: QueryInterface) => {
     await queryInterface.dropTable('areas')
-  }
-};
+  },
+}

@@ -6,12 +6,13 @@ type AreaKind = 'country'
 interface AreaAttributes {
   id: string
   name: string
+  code?: string
   kind: AreaKind
-  population: number
-  continent: string
+  population?: number
+  continent?: string
 }
 
-interface AreaCreationAttributes extends Optional<AreaAttributes, "id"> { }
+interface AreaCreationAttributes extends Optional<AreaAttributes, 'id'> {}
 
 class Area extends Model<AreaAttributes, AreaCreationAttributes> implements AreaAttributes {
   public id!: string
@@ -32,6 +33,7 @@ Area.init(
       defaultValue: Sequelize.literal('gen_random_uuid()'),
     },
     name: DataTypes.TEXT,
+    code: DataTypes.TEXT,
     kind: DataTypes.TEXT,
     population: DataTypes.INTEGER,
     continent: DataTypes.TEXT,

@@ -33,19 +33,19 @@ module.exports = {
       fields: ['areaId'],
       references: {
         table: 'areas',
-        field: 'id'
+        field: 'id',
       },
       onDelete: 'cascade',
-      onUpdate: 'cascade'
+      onUpdate: 'cascade',
     })
 
     await queryInterface.addConstraint('metrics', {
       type: 'unique',
-      fields: ['areaId', 'date']
+      fields: ['areaId', 'date'],
     })
   },
 
   down: async (queryInterface: QueryInterface) => {
     await queryInterface.dropTable('metrics')
-  }
-};
+  },
+}

@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize'
 import { database } from '../db'
-import { Area } from './Area'
 
 interface MetricAttributes {
   id: string
@@ -16,7 +15,7 @@ interface MetricAttributes {
   newVaccinations?: number
 }
 
-interface MetricCreationAttributes extends Optional<MetricAttributes, "id"> { }
+interface MetricCreationAttributes extends Optional<MetricAttributes, 'id'> {}
 
 class Metric extends Model<MetricAttributes, MetricCreationAttributes> implements MetricAttributes {
   public id!: string

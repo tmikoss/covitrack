@@ -2,25 +2,24 @@ import dotenv from 'dotenv'
 import 'reflect-metadata'
 import express from 'express'
 import http from 'http'
-import { loadAndPersist } from './dataflowkitLoader'
 import { database } from './db'
 
 dotenv.config()
 
 const app = express()
 
-app.set("views", "public")
+app.set('views', 'public')
 
 const dataQuery = `
   SELECT a.name,
-         m."activeCases",
+         m."totalCases",
          m.date
   FROM metrics m
   JOIN areas a ON m."areaId" = a.id
   WHERE m.date = (SELECT max(date) FROM metrics)
 `
 
-app.get("/*", async (req, res) => {
+app.get('/*', async (req, res) => {
   const [data] = await database.query(dataQuery)
   res.json(data)
 })
