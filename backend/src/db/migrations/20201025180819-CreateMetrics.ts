@@ -6,22 +6,26 @@ module.exports = {
       id: {
         primaryKey: true,
         type: DataTypes.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       areaId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
       },
       date: {
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: false,
       },
-      activeCases: DataTypes.INTEGER,
       totalCases: DataTypes.INTEGER,
+      newCases: DataTypes.INTEGER,
+      totalTests: DataTypes.INTEGER,
+      newTests: DataTypes.INTEGER,
       totalDeaths: DataTypes.INTEGER,
-      totalRecovered: DataTypes.INTEGER,
+      newDeaths: DataTypes.INTEGER,
+      totalVaccinations: DataTypes.INTEGER,
+      newVaccinations: DataTypes.INTEGER,
       updatedAt: DataTypes.DATE,
-      createdAt: DataTypes.DATE
+      createdAt: DataTypes.DATE,
     })
 
     await queryInterface.addConstraint('metrics', {

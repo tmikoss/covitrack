@@ -1,38 +1,45 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize'
 import { database } from '../db'
 
+type AreaKind = 'country'
+
 interface AreaAttributes {
-  id: string;
-  name: string;
+  id: string
+  name: string
+  kind: AreaKind
+  population: number
+  continent: string
 }
 
 interface AreaCreationAttributes extends Optional<AreaAttributes, "id"> { }
 
 class Area extends Model<AreaAttributes, AreaCreationAttributes> implements AreaAttributes {
-  public id!: string;
-  public name!: string;
+  public id!: string
+  public name!: string
+  public kind!: AreaKind
+  public population!: number
+  public continent!: string
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 Area.init(
   {
     id: {
-      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: Sequelize.literal('uuid_generate_v4()')
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.literal('gen_random_uuid()'),
     },
-    name: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      unique: true
-    }
+    name: DataTypes.TEXT,
+    kind: DataTypes.TEXT,
+    population: DataTypes.INTEGER,
+    continent: DataTypes.TEXT,
   },
   {
-    tableName: "areas",
+    tableName: 'areas',
     sequelize: database,
-    timestamps: true
+    timestamps: true,
   }
 )
 
