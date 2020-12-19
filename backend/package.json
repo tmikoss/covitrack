@@ -30,7 +30,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "dotenv concurrently \"tsc -w\" \"nodemon dist/index.js\""
+    "dev": "dotenv concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "prettify": "prettier --write . ",
+    "loadFullData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadFullData()\"",
+    "loadLatestData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadLatestData()\""
   },
   "nodemonConfig": {
     "ext": "ts,js,json",

@@ -19,7 +19,7 @@ const dataQuery = `
   WHERE m.date = (SELECT max(date) FROM metrics)
 `
 
-app.get('/*', async (req, res) => {
+app.get('/*', async (_req, res) => {
   const [data] = await database.query(dataQuery)
   res.json(data)
 })

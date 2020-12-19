@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize'
 import { database } from '../db'
 
-type AreaKind = 'country'
+type AreaKind = 'country' | 'zone'
 
 interface AreaAttributes {
   id: string
@@ -32,10 +32,13 @@ Area.init(
       type: DataTypes.UUID,
       defaultValue: Sequelize.literal('gen_random_uuid()'),
     },
-    name: DataTypes.TEXT,
+    name: {
+      unique: true,
+      type: DataTypes.TEXT,
+    },
     code: DataTypes.TEXT,
     kind: DataTypes.TEXT,
-    population: DataTypes.INTEGER,
+    population: DataTypes.BIGINT,
     continent: DataTypes.TEXT,
   },
   {

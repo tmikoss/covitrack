@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.TEXT,
       },
-      population: DataTypes.INTEGER,
+      population: DataTypes.BIGINT,
       continent: DataTypes.TEXT,
       updatedAt: DataTypes.DATE,
       createdAt: DataTypes.DATE,
