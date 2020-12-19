@@ -1,9 +1,8 @@
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import axios from 'axios'
 import { database } from './db'
 import { Area } from './models/Area'
 
-const GEOJSON_FILE = join(__dirname, '../sample/countries.geojson')
+const GEOJSON_DATA_URL = 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
 
 interface GeographyFeature {
   properties: {
@@ -13,12 +12,28 @@ interface GeographyFeature {
   geometry: object
 }
 
-export const updateGeography = async () => {
-  console.log('Reading GeoJSON file...')
+interface GeographyDataset {
+  features: GeographyFeature[]
+}
 
-  const { features } = JSON.parse(readFileSync(GEOJSON_FILE, { encoding: 'utf-8' })) as { features: GeographyFeature[] }
+export const fetchAndLoadGeographyData = async () => {
+  console.log(`Downloading geography data...`)
+  const { data } = await axios.get(GEOJSON_DATA_URL)
 
+  console.log(`Loading geography data...`)
+  loadGeographyData(data)
+
+  console.log(`Geography data loaded!`)
+}
+
+const CODE_OVERRIDES = {
+  'Kosovo': 'OWID_KOS'
+} as { [admin: string]: string }
+
+const loadGeographyData = async (source: GeographyDataset) => {
   const transaction = await database.transaction()
+
+  const { features } = source
 
   for (const feature of features) {
     const {
@@ -26,11 +41,11 @@ export const updateGeography = async () => {
       geometry,
     } = feature
 
+    const code = CODE_OVERRIDES[ADMIN] || ISO_A3
+
     const [updatedCount] = await Area.update(
       { geography: geometry },
-      {
-        where: { code: ISO_A3 },
-      }
+      { where: { code } }
     )
 
     if (updatedCount === 0) {
