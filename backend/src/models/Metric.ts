@@ -7,10 +7,12 @@ interface MetricAttributes {
   date: Date
   totalCases?: number
   newCases?: number
+  newCasesPerMillionSmoothed?: number
   totalTests?: number
   newTests?: number
   totalDeaths?: number
   newDeaths?: number
+  newDeathsPerMillionSmoothed?: number
   totalVaccinations?: number
   newVaccinations?: number
 }
@@ -23,10 +25,12 @@ class Metric extends Model<MetricAttributes, MetricCreationAttributes> implement
   public date!: Date
   public totalCases?: number
   public newCases?: number
+  public newCasesPerMillionSmoothed?: number
   public totalTests?: number
   public newTests?: number
   public totalDeaths?: number
   public newDeaths?: number
+  public newDeathsPerMillionSmoothed?: number
   public totalVaccinations?: number
   public newVaccinations?: number
 
@@ -45,10 +49,12 @@ Metric.init(
     date: DataTypes.DATEONLY,
     totalCases: DataTypes.BIGINT,
     newCases: DataTypes.BIGINT,
+    newCasesPerMillionSmoothed: DataTypes.FLOAT,
     totalTests: DataTypes.BIGINT,
     newTests: DataTypes.BIGINT,
     totalDeaths: DataTypes.BIGINT,
     newDeaths: DataTypes.BIGINT,
+    newDeathsPerMillionSmoothed: DataTypes.FLOAT,
     totalVaccinations: DataTypes.BIGINT,
     newVaccinations: DataTypes.BIGINT,
   },

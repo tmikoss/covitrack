@@ -8,6 +8,6 @@ module.exports = {
   },
 
   down: async (queryInterface: QueryInterface) => {
-    await queryInterface.removeColumn('metrics', 'geography')
+    await queryInterface.removeColumn('areas', 'geography')
   },
 }

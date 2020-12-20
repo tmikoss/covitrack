@@ -11,6 +11,7 @@ import format from 'date-fns/format'
 
 export const RADIUS = 100
 const API_DATE_FORMAT = 'yyyyMMdd'
+const WORLD_CODE = 'OWID_WRL'
 
 const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
   const phi = (90 - lat) * (Math.PI / 180)
@@ -24,22 +25,24 @@ const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
 }
 
 export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
-  const { code, features, population } = country
+  const { code, features } = country
 
   const theme = useTheme()
-  const data = useRef(useCases.getState().countries[code] || {})
+  const countryData = useRef(useCases.getState().countries[code] || {})
+  const worldData = useRef(useCases.getState().countries[WORLD_CODE] || {})
   const date = useRef(format(useSettings.getState().focusDate, API_DATE_FORMAT))
 
   useEffect(
     () =>
       useCases.subscribe(
-        (countries: CasesState['countries']) => (data.current = countries[code] || {}),
+        (countries: CasesState['countries']) => {
+          countryData.current = countries[code] || {}
+          worldData.current = countries[WORLD_CODE] || {}
+        },
         (state) => state.countries
       ),
     [code]
   )
-
-  console.log(code, data.current)
 
   useEffect(
     () =>
@@ -74,13 +77,16 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
   const maxLevelColor = new THREE.Color(theme.maxLevel)
 
   useFrame(() => {
-    const newCases = data.current[date.current] || 0
+    const newCasesPerMillionSmoothed = countryData.current[date.current] || 0
+    const worldNewCasesPerMillionSmoothed = worldData.current[date.current] || 0
 
-    const index = (newCases * 10000) / population
+    let index = 0
+    if (worldNewCasesPerMillionSmoothed > 0) {
+      index = newCasesPerMillionSmoothed / (worldNewCasesPerMillionSmoothed * 2)
+    }
 
     const newColor = new THREE.Color(theme.minLevel).lerp(maxLevelColor, index)
     material.color.set(newColor)
-    // console.log(material)
   })
 
   return <group>{meshes}</group>

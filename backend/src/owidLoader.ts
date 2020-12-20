@@ -16,10 +16,12 @@ interface OwidFullDataPoint {
   date: string
   total_cases?: number
   new_cases?: number
+  new_cases_smoothed_per_million?: number
   total_tests?: number
   new_tests?: number
   total_deaths?: number
   new_deaths?: number
+  new_deaths_smoothed_per_million?: number
   total_vaccinations?: number
 }
 
@@ -40,10 +42,12 @@ interface OwidLatestCountry {
   population: number
   total_cases?: number
   new_cases?: number
+  new_cases_smoothed_per_million?: number
   total_tests?: number
   new_tests?: number
   total_deaths?: number
   new_deaths?: number
+  new_deaths_smoothed_per_million?: number
   total_vaccinations?: number
 }
 
@@ -79,10 +83,12 @@ const loadLatestData = async (source: OwidLatestDataset) => {
       population,
       total_cases,
       new_cases,
+      new_cases_smoothed_per_million,
       total_tests,
       new_tests,
       total_deaths,
       new_deaths,
+      new_deaths_smoothed_per_million,
       total_vaccinations,
     } = source[code]
 
@@ -101,10 +107,12 @@ const loadLatestData = async (source: OwidLatestDataset) => {
         date,
         totalCases: total_cases || 0,
         newCases: new_cases || 0,
+        newCasesPerMillionSmoothed: new_cases_smoothed_per_million || 0,
         totalTests: total_tests || 0,
         newTests: new_tests || 0,
         totalDeaths: total_deaths || 0,
         newDeaths: new_deaths || 0,
+        newDeathsPerMillionSmoothed: new_deaths_smoothed_per_million || 0,
         totalVaccinations,
         newVaccinations: totalVaccinations === 0 ? 0 : undefined,
       },
@@ -142,10 +150,12 @@ const loadFullData = async (source: OwidFullDataset) => {
         date,
         total_cases,
         new_cases,
+        new_cases_smoothed_per_million,
         total_tests,
         new_tests,
         total_deaths,
         new_deaths,
+        new_deaths_smoothed_per_million,
         total_vaccinations,
       } = datapoint
 
@@ -157,10 +167,12 @@ const loadFullData = async (source: OwidFullDataset) => {
           date: parse(date, 'yyyy-MM-dd', new Date()),
           totalCases: total_cases || 0,
           newCases: new_cases || 0,
+          newCasesPerMillionSmoothed: new_cases_smoothed_per_million || 0,
           totalTests: total_tests || 0,
           newTests: new_tests || 0,
           totalDeaths: total_deaths || 0,
           newDeaths: new_deaths || 0,
+          newDeathsPerMillionSmoothed: new_deaths_smoothed_per_million || 0,
           totalVaccinations,
           newVaccinations: totalVaccinations === 0 ? 0 : undefined,
         },
