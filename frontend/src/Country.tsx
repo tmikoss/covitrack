@@ -1,11 +1,17 @@
 import * as THREE from 'three'
 import type { Country as CountryData } from 'hooks/countries'
 
-const extrudeOptions = {
-  curveSegments: 1,
-  steps: 1,
-  depth: 0.2,
-  bevelEnabled: false,
+export const RADIUS = 100
+
+const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
+  const phi = (90 - lat) * (Math.PI / 180)
+  const theta = (lon + 180) * (Math.PI / 180)
+
+  const x = -(RADIUS * Math.sin(phi) * Math.cos(theta))
+  const z = RADIUS * Math.sin(phi) * Math.sin(theta)
+  const y = RADIUS * Math.cos(phi)
+
+  return [x, y, z]
 }
 
 export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
@@ -13,29 +19,24 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
     geography: { coordinates },
   } = country
 
-  let meshes = []
+  let meshes = [] as any
 
   for (const polygon of coordinates) {
     for (const ring of polygon) {
-      let initialized = false
-
-      const shape = new THREE.Shape()
+      const vertices = []
 
       for (const coordinate of ring) {
-        const [lon, lat] = coordinate
-        if (initialized) {
-          shape.lineTo(lon, lat)
-        } else {
-          initialized = true
-          shape.moveTo(lon, lat)
-        }
+        const xyz = lonLatToXYZ(...coordinate)
+        vertices.push(...xyz)
       }
 
+      const geometry = new THREE.BufferGeometry()
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
+
       meshes.push(
-        <mesh key={meshes.length}>
-          <extrudeBufferGeometry args={[shape, extrudeOptions]} />
-          <meshStandardMaterial color={'orange'} />
-        </mesh>
+        <points key={meshes.length} geometry={geometry}>
+          <pointsMaterial color={'orange'} size={0.15} />
+        </points>
       )
     }
   }
