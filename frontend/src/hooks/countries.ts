@@ -1,21 +1,34 @@
 import { useEffect } from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+import map from 'lodash/map'
 
-type Lon = number
-type Lat = number
-
-type Coordinate = [Lon, Lat]
+type Coordinate = [lon: number, lat: number]
 
 type MultiPolygon = {
   type: 'MultiPolygon'
   coordinates: Coordinate[][][]
 }
 
+type Polygon = {
+  type: 'Polygon'
+  coordinates: Coordinate[][]
+}
+
+interface ApiCountry {
+  code: string
+  name: string
+  geography: MultiPolygon | Polygon
+}
+
+interface Feature {
+  coordinates: Coordinate[]
+}
+
 export interface Country {
   code: string
   name: string
-  geography: MultiPolygon
+  features: Feature[]
 }
 
 type State = {
@@ -30,8 +43,29 @@ export const useCountries = create<State>(
       countries: [],
       loaded: false,
       load: async () => {
-        const response = await fetch('/api/countries')
-        const countries = await response.json()
+        const response = await fetch('/countries.json')
+        const rawCountries = (await response.json()) as ApiCountry[]
+
+        const countries = map(rawCountries, country => {
+          const { code, name, geography } = country
+
+          let features: Feature[] = []
+
+          if (geography.type === 'MultiPolygon') {
+            for (const polygon of geography.coordinates) {
+              for (const ring of polygon) {
+                features.push({ coordinates: ring })
+              }
+            }
+          } else {
+            for (const ring of geography.coordinates) {
+                features.push({ coordinates: ring })
+            }
+          }
+
+          return { code, name, features }
+        })
+
         set({ countries, loaded: true })
       },
     }),
