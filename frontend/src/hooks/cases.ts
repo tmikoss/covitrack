@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { PUBLIC_URL } from 'utils/globals'
 import create from 'zustand'
 
 type DataByDate = Record<string, number>
@@ -18,7 +19,7 @@ export const useCases = create<State>((set) => ({
   countries: {},
   loaded: false,
   load: async () => {
-    const response = await fetch('/api/cases.json')
+    const response = await fetch(`${PUBLIC_URL}/api/cases.json`)
     const apiData = (await response.json()) as ApiCountry[]
     const countries: State['countries'] = {}
 

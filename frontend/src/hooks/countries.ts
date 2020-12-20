@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import map from 'lodash/map'
+import { PUBLIC_URL } from 'utils/globals'
 
 type Coordinate = [lon: number, lat: number]
 
@@ -43,7 +44,7 @@ export const useCountries = create<State>(
       countries: [],
       loaded: false,
       load: async () => {
-        const response = await fetch('/api/countries.json')
+        const response = await fetch(`${PUBLIC_URL}/api/countries.json`)
         const rawCountries = (await response.json()) as ApiCountry[]
 
         const countries = map(rawCountries, (country) => {
