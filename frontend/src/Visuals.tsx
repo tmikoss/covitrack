@@ -8,6 +8,7 @@ import { PerspectiveCamera } from '@react-three/drei/PerspectiveCamera'
 import { CameraControls } from 'CameraControls'
 import { useCountries } from 'hooks/countries'
 import { GLOBE_RADIUS } from 'utils/globals'
+import { Effects } from 'Effects'
 
 const InnerSphere = () => {
   const theme = useTheme()
@@ -40,6 +41,8 @@ export const Visuals = () => {
         <PerspectiveCamera makeDefault near={0.001} far={360} fov={90} position={[120, 120, 0]} />
 
         <CameraControls />
+
+        <Effects />
       </ThemeContext.Provider>
     </Canvas>
   )

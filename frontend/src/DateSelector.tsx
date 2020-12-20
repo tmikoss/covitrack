@@ -13,16 +13,23 @@ const Container = styled.div`
   position: absolute;
   top: 0;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 20vw auto 20vw;
+  grid-template-areas: 'date slider avg';
   align-items: center;
-
   color: white;
+  text-align: center;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'slider slider'
+                         'date avg';
+  }
 `
 
 const ControlsContainer = styled.div`
+  grid-area: slider;
   display: flex;
   flex-flow: row;
-  width: 40vw;
 `
 
 const Slider = styled.input`
@@ -30,7 +37,13 @@ const Slider = styled.input`
 `
 
 const TextContainer = styled.div`
-  text-align: center;
+  grid-area: avg;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const DateContainer = styled.div`
+  grid-area: date;
 `
 
 const Control = styled.button`
@@ -110,7 +123,7 @@ export const DateSelector = () => {
 
   return (
     <Container>
-      <TextContainer>{format(focusDate, 'dd.MM.yyyy')}</TextContainer>
+      <DateContainer>{format(focusDate, 'dd.MM.yyyy')}</DateContainer>
       <ControlsContainer>
         <Control onClick={setReverse} disabled={focusDate === minDate}>
           {REVERSE_ICONS[animationSpeed]}
