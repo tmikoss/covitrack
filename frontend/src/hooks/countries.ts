@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 type Lon = number
 type Lat = number
@@ -23,15 +24,20 @@ type State = {
   load: () => void
 }
 
-export const useCountries = create<State>((set) => ({
-  countries: [],
-  loaded: false,
-  load: async () => {
-    const response = await fetch('/api/countries')
-    const countries = await response.json()
-    set({ countries, loaded: true })
-  },
-}))
+export const useCountries = create<State>(
+  persist(
+    (set) => ({
+      countries: [],
+      loaded: false,
+      load: async () => {
+        const response = await fetch('/api/countries')
+        const countries = await response.json()
+        set({ countries, loaded: true })
+      },
+    }),
+    { name: 'countries-base-data' }
+  )
+)
 
 const getLoaded = (state: State) => state.loaded
 const getLoad = (state: State) => state.load

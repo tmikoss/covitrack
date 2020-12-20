@@ -17,7 +17,7 @@ app.get('/api/countries', async (_req, res) => {
   const [data] = await database.query(`
     SELECT a.code,
            a.name,
-           ST_AsGeoJSON(a.geography, 3)::json geography
+           ST_AsGeoJSON(ST_Simplify(a.geography::geometry, 0.01, true), 2)::json geography
     FROM areas a
     WHERE a.kind = 'country'
     ORDER BY a.code
