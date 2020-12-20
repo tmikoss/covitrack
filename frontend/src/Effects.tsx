@@ -1,9 +1,9 @@
-import React, { memo, Suspense} from 'react'
+import React, { memo, Suspense } from 'react'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { useDetectGPU } from '@react-three/drei/useDetectGPU'
 
 export const Effects: React.FC = memo(() => {
-  const { tier } = useDetectGPU() || { tier: 0}
+  const { tier } = useDetectGPU() || { tier: 0 }
 
   if (tier === 0) {
     return null

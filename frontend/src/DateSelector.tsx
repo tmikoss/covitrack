@@ -24,8 +24,9 @@ const Container = styled.div`
 
   @media only screen and (max-width: 600px) {
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'slider slider'
-                         'date avg';
+    grid-template-areas:
+      'slider slider'
+      'date avg';
   }
 `
 
@@ -53,7 +54,7 @@ const Control = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
-  opacity: ${({ disabled }) => disabled ? 0.5 : 1};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `
 
 const width = 40
