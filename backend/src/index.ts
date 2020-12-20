@@ -24,7 +24,7 @@ app.get('/api/countries.json', async (_req, res) => {
 	               0.01,
 	               true
 	             ),
-	             -0.1,
+	             -0.05,
 	             'side=left'
 	           ),
              2
