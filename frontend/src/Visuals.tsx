@@ -37,7 +37,7 @@ export const Visuals = () => {
 
         <InnerSphere />
 
-        <PerspectiveCamera makeDefault near={0.001} far={360} fov={90} position={[0, 0, -150]} />
+        <PerspectiveCamera makeDefault near={0.001} far={360} fov={90} position={[120, 120, 0]} />
 
         <CameraControls />
       </ThemeContext.Provider>

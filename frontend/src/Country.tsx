@@ -29,6 +29,9 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
   const worldData = useRef(useCases.getState().countries[WORLD_CODE] || {})
   const date = useRef(format(useSettings.getState().focusDate, API_DATE_FORMAT))
 
+  const targetColor = useRef(new THREE.Color(theme.minLevel))
+  const maxLevelColor = new THREE.Color(theme.maxLevel)
+
   useEffect(
     () =>
       useCases.subscribe(
@@ -71,19 +74,17 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
     meshes.push(<line key={meshes.length} {...lineProps} />)
   }
 
-  const maxLevelColor = new THREE.Color(theme.maxLevel)
-
   useFrame(() => {
     const newCasesPerMillionSmoothed = countryData.current[date.current] || 0
     const worldNewCasesPerMillionSmoothed = worldData.current[date.current] || 0
 
     let index = 0
     if (worldNewCasesPerMillionSmoothed > 0) {
-      index = newCasesPerMillionSmoothed / (worldNewCasesPerMillionSmoothed * 2)
+      index = newCasesPerMillionSmoothed / (worldNewCasesPerMillionSmoothed * 5)
     }
 
-    const newColor = new THREE.Color(theme.minLevel).lerp(maxLevelColor, index)
-    material.color.set(newColor)
+    targetColor.current = new THREE.Color(theme.minLevel).lerp(maxLevelColor, index)
+    material.color.lerp(targetColor.current, 0.1)
   })
 
   return <group>{meshes}</group>

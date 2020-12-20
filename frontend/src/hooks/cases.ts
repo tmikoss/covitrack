@@ -18,7 +18,7 @@ export const useCases = create<State>((set) => ({
   countries: {},
   loaded: false,
   load: async () => {
-    const response = await fetch('/api/cases')
+    const response = await fetch('/api/cases.json')
     const apiData = (await response.json()) as ApiCountry[]
     const countries: State['countries'] = {}
 

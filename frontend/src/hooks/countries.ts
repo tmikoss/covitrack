@@ -43,7 +43,7 @@ export const useCountries = create<State>(
       countries: [],
       loaded: false,
       load: async () => {
-        const response = await fetch('/countries.json')
+        const response = await fetch('/api/countries.json')
         const rawCountries = (await response.json()) as ApiCountry[]
 
         const countries = map(rawCountries, (country) => {
