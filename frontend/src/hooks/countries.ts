@@ -84,5 +84,5 @@ export const useCountryData = () => {
     if (!loaded) {
       load()
     }
-  }, [loaded])
+  }, [load, loaded])
 }

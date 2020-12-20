@@ -42,5 +42,5 @@ export const useCaseData = () => {
     if (!loaded) {
       load()
     }
-  }, [loaded])
+  }, [load, loaded])
 }
