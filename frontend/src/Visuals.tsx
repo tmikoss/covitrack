@@ -3,7 +3,7 @@ import { Canvas } from 'react-three-fiber'
 import { useTheme, ThemeContext } from 'styled-components'
 import map from 'lodash/map'
 import { Country } from 'Country'
-import { Stars } from '@react-three/drei'
+import { OrbitControls, Stars } from '@react-three/drei'
 import { PerspectiveCamera } from '@react-three/drei/PerspectiveCamera'
 import { CameraControls } from 'CameraControls'
 import { useCountries } from 'hooks/countries'
@@ -31,16 +31,22 @@ export const Visuals = () => {
   return (
     <Canvas onCreated={({ gl }) => gl.setClearColor(theme.background)} colorManagement={false}>
       <ThemeContext.Provider value={theme}>
-        <Stars fade factor={3} />
+        <Stars fade factor={10} radius={GLOBE_RADIUS * 3.2} />
         <ambientLight />
 
         {countries}
 
         <InnerSphere />
 
-        <PerspectiveCamera makeDefault near={0.001} far={360} fov={90} position={[120, 120, 0]} />
+        <PerspectiveCamera
+          makeDefault
+          near={0.001}
+          far={GLOBE_RADIUS * 10}
+          fov={90}
+          position={[GLOBE_RADIUS * 1.2, GLOBE_RADIUS * 1.2, 0]}
+        />
 
-        <CameraControls />
+        <OrbitControls enablePan={false} minDistance={GLOBE_RADIUS * 1.1} maxDistance={GLOBE_RADIUS * 3} />
 
         <Effects />
       </ThemeContext.Provider>
