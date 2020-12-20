@@ -60,7 +60,7 @@ export const fetchAndLoadLatestData = async () => {
   const { data } = await axios.get(LATEST_DATA_URL)
 
   console.log(`Loading latest data...`)
-  loadLatestData(data)
+  await loadLatestData(data)
 
   console.log(`Latest data loaded!`)
 }
@@ -128,7 +128,7 @@ export const fetchAndLoadFullData = async () => {
   const { data } = await axios.get(FULL_DATA_URL)
 
   console.log(`Loading full data...`)
-  loadFullData(data)
+  await loadFullData(data)
 
   console.log(`Full data loaded!`)
 }
