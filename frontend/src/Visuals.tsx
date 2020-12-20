@@ -11,10 +11,12 @@ import { useCountries } from 'hooks/countries'
 const InnerSphere = () => {
   const theme = useTheme()
 
-  return <mesh>
-    <sphereBufferGeometry args={[RADIUS * 0.985, 100, 100]} />
-    <meshBasicMaterial color={theme.background} side={2} transparent={true} opacity={0.95}/>
-  </mesh>
+  return (
+    <mesh>
+      <sphereBufferGeometry args={[RADIUS * 0.985, 100, 100]} />
+      <meshBasicMaterial color={theme.background} side={2} transparent={true} opacity={0.95} />
+    </mesh>
+  )
 }
 
 export const Visuals = () => {

@@ -17,6 +17,7 @@ app.get('/api/countries', async (_req, res) => {
   const [data] = await database.query(`
     SELECT a.code,
            a.name,
+           a.population,
            ST_AsGeoJSON(
            	ST_Buffer(
 	             ST_Simplify(
@@ -36,10 +37,10 @@ app.get('/api/countries', async (_req, res) => {
   res.json(data)
 })
 
-app.get('/api/totalcases', async (_req, res) => {
+app.get('/api/cases', async (_req, res) => {
   const [data] = await database.query(`
     SELECT a.code AS country,
-           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."totalCases"), '{}' ) AS "totalCases"
+           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCases"), '{}' ) AS "newCases"
     FROM metrics m
     JOIN areas a ON m."areaId" = a.id
     WHERE a.kind = 'country'
