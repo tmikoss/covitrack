@@ -12,8 +12,8 @@ const InnerSphere = () => {
   const theme = useTheme()
 
   return <mesh>
-    <sphereBufferGeometry args={[RADIUS * 0.99, 100, 100]} />
-    <meshBasicMaterial color={theme.background} side={2} transparent={true} opacity={0.85}/>
+    <sphereBufferGeometry args={[RADIUS * 0.985, 100, 100]} />
+    <meshBasicMaterial color={theme.background} side={2} transparent={true} opacity={0.95}/>
   </mesh>
 }
 

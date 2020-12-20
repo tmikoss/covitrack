@@ -16,25 +16,29 @@ const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
 
 export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
   const { features } = country
+    let meshes = []
 
-  let meshes = [] as any
+    for (const feature of features) {
+      const { coordinates } = feature
 
-  for (const feature of features) {
-    const vertices = []
-    for (const coordinate of feature.coordinates) {
-      const xyz = lonLatToXYZ(...coordinate)
-      vertices.push(...xyz)
+      const vertices = []
+      for (const coordinate of coordinates) {
+        const xyz = lonLatToXYZ(...coordinate)
+        vertices.push(...xyz)
+      }
+
+      const geometry = new THREE.BufferGeometry()
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
+
+      const lineProps: any = { geometry } // TS thinks this is SVG line element
+
+      meshes.push(
+        <line key={meshes.length} {...lineProps}>
+          <lineBasicMaterial color={Math.random() * 0xffffff} />
+        </line>
+      )
     }
 
-    const geometry = new THREE.BufferGeometry()
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
-
-    meshes.push(
-      <points key={meshes.length} geometry={geometry}>
-        <pointsMaterial color={'orange'} size={0.15} />
-      </points>
-    )
-  }
 
   return <group>{meshes}</group>
 }
