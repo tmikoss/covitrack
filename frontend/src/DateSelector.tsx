@@ -7,6 +7,9 @@ import { useCases } from 'hooks/cases'
 import { useCallback, useEffect, useState } from 'react'
 import { WORLD_CODE, API_DATE_FORMAT } from 'utils/globals'
 import round from 'lodash/round'
+import { ReactComponent as RawFastForwardIcon } from 'icons/fastForward.svg'
+import { ReactComponent as RawPlayIcon } from 'icons/playArrow.svg'
+import { ReactComponent as RawPauseIcon } from 'icons/pause.svg'
 
 const Container = styled.div`
   width: 100%;
@@ -16,7 +19,7 @@ const Container = styled.div`
   grid-template-columns: 20vw auto 20vw;
   grid-template-areas: 'date slider avg';
   align-items: center;
-  color: white;
+  color: ${({ theme }) => theme.minLevel};
   text-align: center;
 
   @media only screen and (max-width: 600px) {
@@ -50,14 +53,22 @@ const Control = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
+  opacity: ${({ disabled }) => disabled ? 0.5 : 1};
 `
 
-const REVERSE_ICONS: Record<number, string> = {
-  '-5': '⏸️',
-  '-1': '⏪️',
-  0: '◀️',
-  1: '◀️',
-  5: '◀️',
+const width = 40
+const height = width
+
+const PauseIcon = styled(RawPauseIcon).attrs(() => ({ width, height }))``
+const PlayIcon = styled(RawPlayIcon).attrs(() => ({ width, height }))``
+const FastForwardIcon = styled(RawFastForwardIcon).attrs(() => ({ width, height }))``
+
+const REVERSE_ICONS: Record<number, React.ReactNode> = {
+  '-5': <PauseIcon />,
+  '-1': <FastForwardIcon transform='scale(-1, 1)' />,
+  0: <PlayIcon transform='scale(-1, 1)' />,
+  1: <PlayIcon transform='scale(-1, 1)' />,
+  5: <PlayIcon transform='scale(-1, 1)' />,
 }
 
 const NEXT_REVERSE_SPEED: Record<number, number> = {
@@ -68,12 +79,12 @@ const NEXT_REVERSE_SPEED: Record<number, number> = {
   '5': -1,
 }
 
-const FORWARD_ICONS: Record<number, string> = {
-  '-5': '▶️',
-  '-1': '▶️',
-  0: '▶️',
-  '1': '⏩️',
-  '5': '⏸️',
+const FORWARD_ICONS: Record<number, React.ReactNode> = {
+  '-5': <PlayIcon />,
+  '-1': <PlayIcon />,
+  0: <PlayIcon />,
+  '1': <FastForwardIcon />,
+  '5': <PauseIcon />,
 }
 
 const NEXT_FORWARD_SPEED: Record<number, number> = {
