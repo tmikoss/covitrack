@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "https://tmikoss.github.io/covitrack/static/js/main.1c0fe3d1.chunk.js",
-    "main.js.map": "https://tmikoss.github.io/covitrack/static/js/main.1c0fe3d1.chunk.js.map",
+    "main.js": "https://tmikoss.github.io/covitrack/static/js/main.094b40df.chunk.js",
+    "main.js.map": "https://tmikoss.github.io/covitrack/static/js/main.094b40df.chunk.js.map",
     "runtime-main.js": "https://tmikoss.github.io/covitrack/static/js/runtime-main.8b37eb4a.js",
     "runtime-main.js.map": "https://tmikoss.github.io/covitrack/static/js/runtime-main.8b37eb4a.js.map",
     "static/js/2.37cb904e.chunk.js": "https://tmikoss.github.io/covitrack/static/js/2.37cb904e.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.8b37eb4a.js",
     "static/js/2.37cb904e.chunk.js",
-    "static/js/main.1c0fe3d1.chunk.js"
+    "static/js/main.094b40df.chunk.js"
   ]
 }
