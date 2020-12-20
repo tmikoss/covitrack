@@ -8,18 +8,15 @@ import { useEffect, useRef } from 'react'
 import { useFrame } from 'react-three-fiber'
 import { useTheme } from 'styled-components'
 import format from 'date-fns/format'
-
-export const RADIUS = 100
-const API_DATE_FORMAT = 'yyyyMMdd'
-const WORLD_CODE = 'OWID_WRL'
+import { API_DATE_FORMAT, WORLD_CODE, GLOBE_RADIUS } from 'utils/globals'
 
 const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
   const phi = (90 - lat) * (Math.PI / 180)
   const theta = (lon + 180) * (Math.PI / 180)
 
-  const x = -(RADIUS * Math.sin(phi) * Math.cos(theta))
-  const z = RADIUS * Math.sin(phi) * Math.sin(theta)
-  const y = RADIUS * Math.cos(phi)
+  const x = -(GLOBE_RADIUS * Math.sin(phi) * Math.cos(theta))
+  const z = GLOBE_RADIUS * Math.sin(phi) * Math.sin(theta)
+  const y = GLOBE_RADIUS * Math.cos(phi)
 
   return [x, y, z]
 }

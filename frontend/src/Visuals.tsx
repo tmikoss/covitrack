@@ -2,18 +2,19 @@ import React, { useCallback } from 'react'
 import { Canvas } from 'react-three-fiber'
 import { useTheme, ThemeContext } from 'styled-components'
 import map from 'lodash/map'
-import { Country, RADIUS } from 'Country'
+import { Country } from 'Country'
 import { Stars } from '@react-three/drei'
 import { PerspectiveCamera } from '@react-three/drei/PerspectiveCamera'
 import { CameraControls } from 'CameraControls'
 import { useCountries } from 'hooks/countries'
+import { GLOBE_RADIUS } from 'utils/globals'
 
 const InnerSphere = () => {
   const theme = useTheme()
 
   return (
     <mesh>
-      <sphereBufferGeometry args={[RADIUS * 0.985, 100, 100]} />
+      <sphereBufferGeometry args={[GLOBE_RADIUS * 0.985, 100, 100]} />
       <meshBasicMaterial color={theme.background} side={2} transparent={true} opacity={0.95} />
     </mesh>
   )
