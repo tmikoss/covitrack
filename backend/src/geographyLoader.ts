@@ -27,7 +27,7 @@ export const fetchAndLoadGeographyData = async () => {
 }
 
 const CODE_OVERRIDES = {
-  'Kosovo': 'OWID_KOS'
+  Kosovo: 'OWID_KOS',
 } as { [admin: string]: string }
 
 const loadGeographyData = async (source: GeographyDataset) => {
@@ -43,10 +43,7 @@ const loadGeographyData = async (source: GeographyDataset) => {
 
     const code = CODE_OVERRIDES[ADMIN] || ISO_A3
 
-    const [updatedCount] = await Area.update(
-      { geography: geometry },
-      { where: { code } }
-    )
+    const [updatedCount] = await Area.update({ geography: geometry }, { where: { code } })
 
     if (updatedCount === 0) {
       console.log(`                                     No area matches ${ADMIN} / ${ISO_A3}`)
