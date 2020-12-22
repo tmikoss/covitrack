@@ -67,7 +67,7 @@ const loadGeographyData = async (source: GeographyDataset, nameProperty: 'WB_NAM
       continue
     }
 
-    const [updatedCount] = await Area.update({ geography: geometry }, { where: { code } })
+    const [updatedCount] = await Area.update({ outline: geometry }, { where: { code } })
 
     if (updatedCount === 0) {
       console.log(`                                     No area matches ${name} / ${iso}`)

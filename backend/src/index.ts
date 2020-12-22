@@ -4,6 +4,7 @@ import express from 'express'
 import http from 'http'
 import { database } from './db'
 import compression from 'compression'
+import { join } from 'path'
 
 dotenv.config()
 
@@ -11,35 +12,13 @@ const app = express()
 
 app.use(compression())
 
-app.set('views', 'public')
-
-app.get('/api/countries.json', async (_req, res) => {
-  const [data] = await database.query(`
-    SELECT a.code,
-           a.name,
-           ST_AsGeoJSON(
-           	ST_Buffer(
-	             ST_Simplify(
-	               a.geography::geometry,
-	               0.01,
-	               true
-	             ),
-	             -0.05,
-	             'side=left'
-	           ),
-             2
-           )::json geography
-    FROM areas a
-    WHERE a.kind = 'country'
-    ORDER BY a.code
-  `)
-  res.json(data)
-})
+app.use(express.static(join(__dirname, '../public')))
 
 app.get('/api/cases.json', async (_req, res) => {
   const [data] = await database.query(`
     SELECT a.code AS country,
-           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases"
+           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases",
+           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newDeathsPerMillionSmoothed"), '{}' ) AS "newDeaths"
     FROM metrics m
     JOIN areas a ON m."areaId" = a.id
     GROUP BY a.id

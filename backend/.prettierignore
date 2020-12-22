@@ -2,3 +2,4 @@
 /dist
 tsconfig.json
 /src/data
+/public

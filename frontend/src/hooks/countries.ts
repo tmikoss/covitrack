@@ -19,7 +19,7 @@ type Polygon = {
 interface ApiCountry {
   code: string
   name: string
-  geography: MultiPolygon | Polygon
+  outline: MultiPolygon | Polygon
 }
 
 interface Feature {
@@ -48,18 +48,18 @@ export const useCountries = create<State>(
         const rawCountries = (await response.json()) as ApiCountry[]
 
         const countries = map(rawCountries, (country) => {
-          const { code, name, geography } = country
+          const { code, name, outline } = country
 
           let features: Feature[] = []
 
-          if (geography.type === 'MultiPolygon') {
-            for (const polygon of geography.coordinates) {
+          if (outline.type === 'MultiPolygon') {
+            for (const polygon of outline.coordinates) {
               for (const ring of polygon) {
                 features.push({ coordinates: ring })
               }
             }
           } else {
-            for (const ring of geography.coordinates) {
+            for (const ring of outline.coordinates) {
               features.push({ coordinates: ring })
             }
           }

@@ -36,7 +36,8 @@
     "prettify": "prettier --write . ",
     "loadFullData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadFullData()\"",
     "loadLatestData": "dotenv node -e \"require('./dist/owidLoader.js').fetchAndLoadLatestData()\"",
-    "loadGeographyData": "dotenv node -e \"require('./dist/geographyLoader.js').fetchAndLoadGeographyData()\""
+    "loadGeographyData": "dotenv node -e \"require('./dist/geographyLoader.js').fetchAndLoadGeographyData()\"",
+    "postprocessGeography": "dotenv node -e \"require('./dist/tasks.js').postprocessGeography()\""
   },
   "nodemonConfig": {
     "ext": "ts,js,json",
