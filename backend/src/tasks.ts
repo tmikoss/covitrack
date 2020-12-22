@@ -7,14 +7,16 @@ const STATIC_FILE = join(__dirname, '../public/api/countries.json')
 const buildBufferedOutlines = async () => {
   await database.query(`
     UPDATE areas
-    SET "bufferedOutline" = ST_Buffer(
-      ST_Simplify(
-        outline,
-        0.01,
-        true
-      ),
-      -0.05,
-      'side=left'
+    SET "bufferedOutline" = ST_Multi(
+      ST_Buffer(
+        ST_Simplify(
+          outline,
+          0.01,
+          true
+        ),
+        -0.02,
+        'side=left'
+      )
     )
     WHERE outline IS NOT NULL
   `)
@@ -29,7 +31,7 @@ const buildContainedPoints = async () => {
     )
     UPDATE areas
     SET "containedPoints" = (
-      SELECT ST_Collect(ARRAY_AGG(points.point))
+      SELECT ST_Multi(ST_Collect(ARRAY_AGG(points.point)))
       FROM points
       WHERE ST_Contains("bufferedOutline", points.point)
     )

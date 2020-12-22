@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
 import map from 'lodash/map'
 import { PUBLIC_URL } from 'utils/globals'
 
@@ -11,15 +10,16 @@ type MultiPolygon = {
   coordinates: Coordinate[][][]
 }
 
-type Polygon = {
-  type: 'Polygon'
-  coordinates: Coordinate[][]
+type MultiPoint = {
+  type: 'MultiPoint'
+  coordinates: Coordinate[]
 }
 
 interface ApiCountry {
   code: string
   name: string
-  outline: MultiPolygon | Polygon
+  outline: MultiPolygon
+  points: MultiPoint
 }
 
 interface Feature {
@@ -29,7 +29,8 @@ interface Feature {
 export interface Country {
   code: string
   name: string
-  features: Feature[]
+  outlines: Feature[]
+  points: Feature
 }
 
 type State = {
@@ -39,39 +40,30 @@ type State = {
 }
 
 export const useCountries = create<State>(
-  persist(
-    (set) => ({
-      countries: [],
-      loaded: false,
-      load: async () => {
-        const response = await fetch(`${PUBLIC_URL}/api/countries.json`)
-        const rawCountries = (await response.json()) as ApiCountry[]
+  (set) => ({
+    countries: [],
+    loaded: false,
+    load: async () => {
+      const response = await fetch(`${PUBLIC_URL}/api/countries.json`)
+      const rawCountries = (await response.json()) as ApiCountry[]
 
-        const countries = map(rawCountries, (country) => {
-          const { code, name, outline } = country
+      const countries = map(rawCountries, (country) => {
+        const { code, name, outline, points } = country
 
-          let features: Feature[] = []
+        let outlines: Feature[] = []
 
-          if (outline.type === 'MultiPolygon') {
-            for (const polygon of outline.coordinates) {
-              for (const ring of polygon) {
-                features.push({ coordinates: ring })
-              }
-            }
-          } else {
-            for (const ring of outline.coordinates) {
-              features.push({ coordinates: ring })
-            }
+        for (const polygon of outline.coordinates) {
+          for (const ring of polygon) {
+            outlines.push({ coordinates: ring })
           }
+        }
 
-          return { code, name, features }
-        })
+        return { code, name, outlines, points: { coordinates: points?.coordinates || [] } }
+      })
 
-        set({ countries, loaded: true })
-      },
-    }),
-    { name: 'countries-base-data' }
-  )
+      set({ countries, loaded: true })
+    },
+  })
 )
 
 const getLoaded = (state: State) => state.loaded

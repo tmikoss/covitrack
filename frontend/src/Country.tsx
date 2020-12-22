@@ -22,7 +22,7 @@ const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
 }
 
 export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
-  const { code, features } = country
+  const { code, outlines } = country
 
   const theme = useTheme()
   const countryData = useRef(useCases.getState().countries[code] || {})
@@ -57,8 +57,8 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
 
   let meshes = []
 
-  for (const feature of features) {
-    const { coordinates } = feature
+  for (const outline of outlines) {
+    const { coordinates } = outline
 
     const vertices = []
     for (const coordinate of coordinates) {
