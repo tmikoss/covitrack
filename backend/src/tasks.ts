@@ -60,13 +60,13 @@ const exportToStaticFile = async () => {
 }
 
 export const postprocessGeography = async () => {
-  // console.log('Building buffered outlines...')
+  console.log('Building buffered outlines...')
   await buildBufferedOutlines()
 
-  // console.log('Building contained points for larger areas...')
+  console.log('Building contained points for larger areas...')
   await buildContainedPoints()
 
-  // console.log('Build cointained points for smaller areas...')
+  console.log('Build cointained points for smaller areas...')
   await buildMissingContainedPointsFromCenters()
 
   console.log('Exporting static file...')
