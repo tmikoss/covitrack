@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "https://tmikoss.github.io/covitrack/static/js/main.fb7055b1.chunk.js",
-    "main.js.map": "https://tmikoss.github.io/covitrack/static/js/main.fb7055b1.chunk.js.map",
+    "main.js": "https://tmikoss.github.io/covitrack/static/js/main.47dcc8c9.chunk.js",
+    "main.js.map": "https://tmikoss.github.io/covitrack/static/js/main.47dcc8c9.chunk.js.map",
     "runtime-main.js": "https://tmikoss.github.io/covitrack/static/js/runtime-main.8b37eb4a.js",
     "runtime-main.js.map": "https://tmikoss.github.io/covitrack/static/js/runtime-main.8b37eb4a.js.map",
-    "static/js/2.b4c91386.chunk.js": "https://tmikoss.github.io/covitrack/static/js/2.b4c91386.chunk.js",
-    "static/js/2.b4c91386.chunk.js.map": "https://tmikoss.github.io/covitrack/static/js/2.b4c91386.chunk.js.map",
+    "static/js/2.65118a7f.chunk.js": "https://tmikoss.github.io/covitrack/static/js/2.65118a7f.chunk.js",
+    "static/js/2.65118a7f.chunk.js.map": "https://tmikoss.github.io/covitrack/static/js/2.65118a7f.chunk.js.map",
     "index.html": "https://tmikoss.github.io/covitrack/index.html",
-    "static/js/2.b4c91386.chunk.js.LICENSE.txt": "https://tmikoss.github.io/covitrack/static/js/2.b4c91386.chunk.js.LICENSE.txt",
+    "static/js/2.65118a7f.chunk.js.LICENSE.txt": "https://tmikoss.github.io/covitrack/static/js/2.65118a7f.chunk.js.LICENSE.txt",
     "static/media/fastForward.b7d40603.svg": "https://tmikoss.github.io/covitrack/static/media/fastForward.b7d40603.svg",
     "static/media/pause.9f7d9f6d.svg": "https://tmikoss.github.io/covitrack/static/media/pause.9f7d9f6d.svg",
     "static/media/playArrow.b2f4ba6a.svg": "https://tmikoss.github.io/covitrack/static/media/playArrow.b2f4ba6a.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.8b37eb4a.js",
-    "static/js/2.b4c91386.chunk.js",
-    "static/js/main.fb7055b1.chunk.js"
+    "static/js/2.65118a7f.chunk.js",
+    "static/js/main.47dcc8c9.chunk.js"
   ]
 }
