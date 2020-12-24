@@ -80,7 +80,7 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
 
     let index = 0
     if (worldNewCasesPerMillionSmoothed > 0) {
-      index = newCasesPerMillionSmoothed / (worldNewCasesPerMillionSmoothed * 5)
+      index = newCasesPerMillionSmoothed / (worldNewCasesPerMillionSmoothed * 7)
     }
 
     targetColor.current = new THREE.Color(theme.minLevel).lerp(maxLevelColor, index)

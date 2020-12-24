@@ -9,11 +9,12 @@ export type State = {
 }
 
 export const useSettings = create<State>((set) => {
+  const minDate = new Date(2020, 0, 1)
   const maxDate = subDays(new Date(), 2)
 
   return {
-    focusDate: maxDate,
-    minDate: new Date(2020, 0, 1),
+    focusDate: minDate,
+    minDate,
     maxDate,
     setFocusDate: (focusDate) => set({ focusDate }),
   }
