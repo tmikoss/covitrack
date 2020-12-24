@@ -8,14 +8,17 @@ const buildBufferedOutlines = async () => {
   await database.query(`
     UPDATE areas
     SET "bufferedOutline" = ST_Multi(
-      ST_Buffer(
-        ST_Simplify(
-          outline,
-          0.01,
-          true
+      ST_Segmentize(
+        ST_Buffer(
+          ST_Simplify(
+            outline,
+            0.01,
+            true
+          ),
+          -0.05,
+          'side=left'
         ),
-        -0.02,
-        'side=left'
+        1
       )
     )
     WHERE outline IS NOT NULL
@@ -51,8 +54,7 @@ const exportToStaticFile = async () => {
   const [data] = await database.query(`
     SELECT code,
         	 name,
-        	 ST_AsGeoJSON("bufferedOutline", 2)::json AS outline,
-        	 ST_AsGeoJSON("containedPoints", 2)::json AS points
+        	 ST_AsGeoJSON("bufferedOutline", 2)::json AS outline
     FROM areas
     WHERE kind = 'country'
     ORDER BY code ASC;
@@ -66,10 +68,10 @@ export const postprocessGeography = async () => {
   await buildBufferedOutlines()
 
   console.log('Building contained points for larger areas...')
-  await buildContainedPoints()
+  // await buildContainedPoints()
 
   console.log('Build cointained points for smaller areas...')
-  await buildMissingContainedPointsFromCenters()
+  // await buildMissingContainedPointsFromCenters()
 
   console.log('Exporting static file...')
   await exportToStaticFile()

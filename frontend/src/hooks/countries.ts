@@ -19,7 +19,7 @@ interface ApiCountry {
   code: string
   name: string
   outline: MultiPolygon
-  points: MultiPoint
+  points?: MultiPoint
 }
 
 interface Feature {
