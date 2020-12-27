@@ -3,7 +3,6 @@ import { join } from 'path'
 import { database } from './db'
 
 const COUNTRIES_STATIC_FILE = join(__dirname, '../public/api/countries.json')
-const CASES_STATIC_FILE = join(__dirname, '../public/api/cases.json')
 
 const buildBufferedOutlines = async () => {
   await database.query(`
@@ -62,20 +61,6 @@ const exportCountriesToStaticFile = async () => {
   `)
 
   writeFileSync(COUNTRIES_STATIC_FILE, JSON.stringify(data))
-}
-
-export const exportCasesToStaticFile = async () => {
-  const [data] = await database.query(`
-    SELECT a.code AS country,
-           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases",
-           COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newDeathsPerMillionSmoothed"), '{}' ) AS "newDeaths"
-    FROM metrics m
-    JOIN areas a ON m."areaId" = a.id
-    GROUP BY a.id
-    ORDER BY a.code
-  `)
-
-  writeFileSync(CASES_STATIC_FILE, JSON.stringify(data))
 }
 
 export const postprocessGeography = async () => {
