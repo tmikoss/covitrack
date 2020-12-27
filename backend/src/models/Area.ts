@@ -15,6 +15,8 @@ interface AreaAttributes {
   outline?: Geojson
   bufferedOutline?: Geojson
   containedPoints?: Geojson
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 interface AreaCreationAttributes extends Optional<AreaAttributes, 'id'> {}

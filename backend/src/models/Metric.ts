@@ -15,6 +15,8 @@ interface MetricAttributes {
   newDeathsPerMillionSmoothed?: number
   totalVaccinations?: number
   newVaccinations?: number
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 interface MetricCreationAttributes extends Optional<MetricAttributes, 'id'> {}

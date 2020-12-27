@@ -4,6 +4,7 @@ import http from 'http'
 import compression from 'compression'
 import { join } from 'path'
 import { database } from './db'
+import { scheduleRegularUpdates } from './owidLoader'
 
 const app = express()
 
@@ -35,5 +36,7 @@ app.get('/*', (_req, res) => {
 const server = http.createServer(app)
 
 server.listen(process.env.PORT, () => {
-  console.log('running')
+  console.log(`running on ${process.env.PORT}`)
+
+  scheduleRegularUpdates()
 })

@@ -3,6 +3,8 @@ import { Area } from './models/Area'
 import { Metric } from './models/Metric'
 import { parse, parseISO, subDays } from 'date-fns'
 import axios from 'axios'
+import { Worker, QueueScheduler, Queue } from 'bullmq'
+import { redis } from './redis'
 
 const FULL_DATA_URL = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json'
 
@@ -183,3 +185,33 @@ const loadFullData = async (source: OwidFullDataset) => {
 
   await transaction.commit()
 }
+
+export const scheduleRegularUpdates = async () => {
+  const queueName = 'owid'
+  const connection = redis
+  const cron = '*/15 * * * *'
+
+  new QueueScheduler(queueName, { connection })
+
+  const queue = new Queue(queueName, { connection })
+  await queue.add('loadData', {}, { repeat: { cron } })
+
+  new Worker(
+    queueName,
+    async () => {
+      const remoteDataUpdatedAt = await fetchLastUpdateTimestamp()
+      const localDataUpdatedAt = (await Metric.max('updatedAt')) as Date
+
+      console.log(`Local data updated at ${localDataUpdatedAt}, remote at ${remoteDataUpdatedAt}`)
+
+      if (!localDataUpdatedAt || remoteDataUpdatedAt > localDataUpdatedAt) {
+        fetchAndLoadFullData()
+      }
+    },
+    { connection }
+  )
+
+  console.log(`Updating data at ${cron}`)
+}
+
+
