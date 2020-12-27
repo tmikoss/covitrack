@@ -189,7 +189,7 @@ const loadFullData = async (source: OwidFullDataset) => {
 export const scheduleRegularUpdates = async () => {
   const queueName = 'owid'
   const connection = redis
-  const cron = '*/15 * * * *'
+  const cron = '0/15 * * * *'
 
   new QueueScheduler(queueName, { connection })
 
