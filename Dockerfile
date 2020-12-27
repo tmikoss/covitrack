@@ -30,8 +30,8 @@ RUN yarn install --production
 
 COPY backend/.sequelizerc /app/
 
-COPY --from=backend-builder /app/dist /app/
-COPY --from=backend-builder /app/public /app/
+COPY --from=backend-builder /app/dist /app/dist
+COPY --from=backend-builder /app/public /app/public
 
 COPY --from=frontend-builder /app/build /app/public
 

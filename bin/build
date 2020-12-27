@@ -1,0 +1,6 @@
+#!/bin/bash
+
+RELEASE=latest
+IMAGE_NAME='registry.digitalocean.com/covitrack/covitrack'
+
+docker build -t $IMAGE_NAME:$RELEASE . && docker push $IMAGE_NAME:$RELEASE

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+USER=root
+APP=covitrack
+SERVER=mikoss.lv
+RELEASE=latest
+IMAGE_NAME='registry.digitalocean.com/covitrack/covitrack'
+
+ssh $USER@$SERVER "docker pull $IMAGE_NAME:$RELEASE && docker tag $IMAGE_NAME:$RELEASE dokku/$APP:$RELEASE && dokku tags:deploy $APP $RELEASE"
