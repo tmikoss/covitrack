@@ -22,7 +22,7 @@ app.use(compression())
 app.use(express.static(join(__dirname, '../public'), { index: 'index.html' }))
 
 app.get('/api/cases.json', async (_req, res) => {
-  const data = await cache.wrap('/api/cases.json', async (cb: (result: any) => void) => {
+  const data = await cache.wrap('/api/cases.json', async () => {
     const [data] = await database.query(`
       SELECT a.code AS country,
             COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases",
@@ -33,7 +33,7 @@ app.get('/api/cases.json', async (_req, res) => {
       ORDER BY a.code
     `)
 
-    cb(data)
+    return data
   })
 
   res.json(data)
