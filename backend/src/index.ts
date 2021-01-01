@@ -25,8 +25,7 @@ app.get('/api/cases.json', async (_req, res) => {
   const data = await cache.wrap('/api/cases.json', async () => {
     const [data] = await database.query(`
       SELECT a.code AS country,
-            COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases",
-            COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newDeathsPerMillionSmoothed"), '{}' ) AS "newDeaths"
+             COALESCE(JSON_OBJECT_AGG(TO_CHAR(m.date, 'YYYYMMDD'), m."newCasesPerMillionSmoothed"), '{}' ) AS "newCases"
       FROM metrics m
       JOIN areas a ON m."areaId" = a.id
       GROUP BY a.id
