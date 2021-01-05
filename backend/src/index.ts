@@ -9,10 +9,12 @@ import { redis } from './redis'
 import cacheManager from 'cache-manager'
 import cacheManagerIoredis from 'cache-manager-ioredis'
 
+const ttl = 600
+
 const cache = cacheManager.caching({
   store: cacheManagerIoredis,
   redisInstance: redis,
-  ttl: 600
+  ttl
 })
 
 const app = express()
@@ -33,7 +35,7 @@ app.get('/api/cases.json', async (_req, res) => {
     `)
 
     return data
-  })
+  }, { ttl })
 
   res.json(data)
 })
