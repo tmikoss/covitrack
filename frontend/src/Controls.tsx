@@ -1,5 +1,5 @@
 import { useSettings } from 'hooks/settings'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import differenceInDays from 'date-fns/differenceInDays'
 import addDays from 'date-fns/addDays'
 import format from 'date-fns/format'
@@ -11,11 +11,12 @@ import { ReactComponent as RawFastForwardIcon } from 'icons/fastForward.svg'
 import { ReactComponent as RawPlayIcon } from 'icons/playArrow.svg'
 import { ReactComponent as RawPauseIcon } from 'icons/pause.svg'
 import { useCountries } from 'hooks/countries'
+import { Sparkline } from './Sparkline'
 
 const Container = styled.div`
   width: 100%;
   position: absolute;
-  top: 0;
+  bottom: 0;
   display: grid;
   grid-template-columns: 20vw 1fr 20vw;
   grid-template-areas: 'date slider avg';
@@ -38,6 +39,10 @@ const ControlsContainer = styled.div`
 `
 
 const Slider = styled.input`
+  flex: 1;
+`
+
+const GraphContainer = styled.div`
   flex: 1;
 `
 
@@ -97,14 +102,15 @@ const NEXT_FORWARD_SPEED: Record<number, number> = {
   '5': 0,
 }
 
-export const DateSelector = () => {
+export const Controls = () => {
   const { minDate, maxDate, focusDate, setFocusDate } = useSettings()
   const [animationSpeed, setAnimationSpeed] = useState(0)
 
   const { code, name } = useCountries(useCallback((state) => state.activeCountry, [])) || {}
-  const activeCountryData = useCases(
-    useCallback((state) => (code ? state.countries[code] : state.countries[WORLD_CODE]) || {}, [code])
-  ) || {}
+
+  const activeCode = code || WORLD_CODE
+
+  const activeCountryData = useCases(useCallback((state) => state.countries[activeCode], [activeCode])) || {}
 
   const averageNewCases = activeCountryData[format(focusDate, API_DATE_FORMAT)] || 0
 
@@ -139,12 +145,16 @@ export const DateSelector = () => {
 
   return (
     <Container>
-      <DateContainer>{format(focusDate, 'dd.MM.yyyy')}, {name || 'Worldwide'}</DateContainer>
+      <DateContainer>
+        {format(focusDate, 'dd.MM.yyyy')}, {name || 'Worldwide'}
+      </DateContainer>
       <ControlsContainer>
         <Control onClick={setReverse} disabled={focusDate === minDate}>
           {REVERSE_ICONS[animationSpeed]}
         </Control>
-        <Slider type='range' min={0} max={max} value={value} onChange={onChange} />
+        <GraphContainer>
+          <Sparkline country={activeCode} setAnimationSpeed={setAnimationSpeed} />
+        </GraphContainer>
         <Control onClick={setForward} disabled={focusDate === maxDate}>
           {FORWARD_ICONS[animationSpeed]}
         </Control>
