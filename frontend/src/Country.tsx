@@ -9,17 +9,7 @@ import { useFrame } from 'react-three-fiber'
 import { useTheme } from 'styled-components'
 import format from 'date-fns/format'
 import { API_DATE_FORMAT, WORLD_CODE, GLOBE_RADIUS } from 'utils/globals'
-
-const lonLatToXYZ = (lon: number, lat: number): [number, number, number] => {
-  const phi = (90 - lat) * (Math.PI / 180)
-  const theta = (lon + 180) * (Math.PI / 180)
-
-  const x = -(GLOBE_RADIUS * Math.sin(phi) * Math.cos(theta))
-  const z = GLOBE_RADIUS * Math.sin(phi) * Math.sin(theta)
-  const y = GLOBE_RADIUS * Math.cos(phi)
-
-  return [x, y, z]
-}
+import { lonLatToXYZ } from 'utils/math'
 
 export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
   const { code, outlines } = country
@@ -62,7 +52,7 @@ export const Country: React.FC<{ country: CountryData }> = ({ country }) => {
 
     const vertices = []
     for (const coordinate of coordinates) {
-      const xyz = lonLatToXYZ(...coordinate)
+      const xyz = lonLatToXYZ(...coordinate, GLOBE_RADIUS)
       vertices.push(...xyz)
     }
 
