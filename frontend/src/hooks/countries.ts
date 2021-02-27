@@ -2,8 +2,9 @@ import { useEffect } from 'react'
 import create from 'zustand'
 import map from 'lodash/map'
 import { PUBLIC_URL } from 'utils/globals'
-
-type Coordinate = [lon: number, lat: number]
+import { polygonIncludesPoint, Coordinate } from 'utils/math'
+import find from 'lodash/find'
+import some from 'lodash/some'
 
 type MultiPolygon = {
   type: 'MultiPolygon'
@@ -35,36 +36,46 @@ export interface Country {
 
 type State = {
   countries: Country[]
+  activeCountry: Country | undefined
   loaded: boolean
   load: () => void
+  activateByCoordinates: (point: Coordinate) => void
 }
 
-export const useCountries = create<State>(
-  (set) => ({
-    countries: [],
-    loaded: false,
-    load: async () => {
-      const response = await fetch(`${PUBLIC_URL}/api/countries.json`)
-      const rawCountries = (await response.json()) as ApiCountry[]
+export const useCountries = create<State>((set, get) => ({
+  countries: [],
+  activeCountry: undefined,
+  loaded: false,
+  load: async () => {
+    const response = await fetch(`${PUBLIC_URL}/api/countries.json`)
+    const rawCountries = (await response.json()) as ApiCountry[]
 
-      const countries = map(rawCountries, (country) => {
-        const { code, name, outline, points } = country
+    const countries = map(rawCountries, (country) => {
+      const { code, name, outline, points } = country
 
-        let outlines: Feature[] = []
+      let outlines: Feature[] = []
 
-        for (const polygon of outline.coordinates) {
-          for (const ring of polygon) {
-            outlines.push({ coordinates: ring })
-          }
+      for (const polygon of outline.coordinates) {
+        for (const ring of polygon) {
+          outlines.push({ coordinates: ring })
         }
+      }
 
-        return { code, name, outlines, points: { coordinates: points?.coordinates || [] } }
-      })
+      return { code, name, outlines, points: { coordinates: points?.coordinates || [] } }
+    })
 
-      set({ countries, loaded: true })
-    },
-  })
-)
+    set({ countries, loaded: true, activeCountry: undefined })
+  },
+  activateByCoordinates: (point: Coordinate) => {
+    const { countries } = get()
+
+    const activeCountry = find(countries, ({ outlines }) => {
+      return some(outlines, ({ coordinates }) => polygonIncludesPoint(coordinates, point))
+    })
+
+    set({ activeCountry })
+  },
+}))
 
 const getLoaded = (state: State) => state.loaded
 const getLoad = (state: State) => state.load

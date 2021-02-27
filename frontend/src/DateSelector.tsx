@@ -16,7 +16,7 @@ const Container = styled.div`
   position: absolute;
   top: 0;
   display: grid;
-  grid-template-columns: 20vw auto 20vw;
+  grid-template-columns: 20vw 1fr 20vw;
   grid-template-areas: 'date slider avg';
   align-items: center;
   color: ${({ theme }) => theme.minLevel};

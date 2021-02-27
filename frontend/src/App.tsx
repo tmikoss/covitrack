@@ -5,6 +5,7 @@ import reset from 'styled-reset'
 import { useCountryData } from 'hooks/countries'
 import { useCaseData } from 'hooks/cases'
 import { DateSelector } from './DateSelector'
+import { ActiveCountry } from './ActiveCountry'
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -24,6 +25,7 @@ export const App = () => {
       <GlobalStyle />
       <Visuals />
       <DateSelector />
+      <ActiveCountry />
     </ThemeProvider>
   )
 }
