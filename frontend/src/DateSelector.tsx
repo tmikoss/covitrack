@@ -10,6 +10,7 @@ import round from 'lodash/round'
 import { ReactComponent as RawFastForwardIcon } from 'icons/fastForward.svg'
 import { ReactComponent as RawPlayIcon } from 'icons/playArrow.svg'
 import { ReactComponent as RawPauseIcon } from 'icons/pause.svg'
+import { useCountries } from 'hooks/countries'
 
 const Container = styled.div`
   width: 100%;
@@ -100,9 +101,12 @@ export const DateSelector = () => {
   const { minDate, maxDate, focusDate, setFocusDate } = useSettings()
   const [animationSpeed, setAnimationSpeed] = useState(0)
 
-  const worldData = useCases(useCallback((state) => state.countries[WORLD_CODE] || {}, []))
+  const { code, name } = useCountries(useCallback((state) => state.activeCountry, [])) || {}
+  const activeCountryData = useCases(
+    useCallback((state) => (code ? state.countries[code] : state.countries[WORLD_CODE]) || {}, [code])
+  ) || {}
 
-  const averageNewCases = worldData[format(focusDate, API_DATE_FORMAT)] || 0
+  const averageNewCases = activeCountryData[format(focusDate, API_DATE_FORMAT)] || 0
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -135,7 +139,7 @@ export const DateSelector = () => {
 
   return (
     <Container>
-      <DateContainer>{format(focusDate, 'dd.MM.yyyy')}</DateContainer>
+      <DateContainer>{format(focusDate, 'dd.MM.yyyy')}, {name || 'Worldwide'}</DateContainer>
       <ControlsContainer>
         <Control onClick={setReverse} disabled={focusDate === minDate}>
           {REVERSE_ICONS[animationSpeed]}
