@@ -8,6 +8,7 @@ import flatMap from 'lodash/flatMap'
 import parse from 'date-fns/parse'
 import { API_DATE_FORMAT } from 'utils/globals'
 import addDays from 'date-fns/addDays'
+import clamp from 'lodash/clamp'
 
 const FillLine = styled.polyline`
   stroke-width: 0;
@@ -40,8 +41,10 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
   const { minDate, maxDate, focusDate, setFocusDate } = useSettings()
 
   const svgRef = useRef<SVGSVGElement>(null)
+  const draggingRef = useRef(false)
 
-  const margin = 1
+  const marginY = 2
+  const marginX = 10
 
   const countryData = useCases(useCallback((state) => state.countries[country], [country]))
 
@@ -61,12 +64,16 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
     })
   )
 
-  const fillLinePoints = [...mainLinePoints, width, height + margin, 0, height + margin]
+  const fillLinePoints = [...mainLinePoints, width, height + marginY, 0, height + marginY]
 
   const sliderX = differenceInDays(focusDate, minDate)
 
-  const onClick = useCallback(
+  const drag = useCallback(
     (e: MouseEvent) => {
+      if (!draggingRef.current) {
+        return
+      }
+
       const svg = svgRef.current
 
       if (!svg) {
@@ -75,7 +82,6 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
 
       const tempPoint = svg.createSVGPoint()
       tempPoint.x = e.clientX
-      tempPoint.y = e.clientY
 
       const ctm = svg.getScreenCTM()
       if (!ctm) {
@@ -83,26 +89,38 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
       }
       const { x } = tempPoint.matrixTransform(ctm.inverse())
 
-      setFocusDate(addDays(minDate, Math.floor(x)))
+      setFocusDate(addDays(minDate, clamp(Math.floor(x), 0, width)))
       setAnimationSpeed(0)
     },
     [minDate, setFocusDate, setAnimationSpeed]
   )
 
+  const startDragging = useCallback(
+    (e: MouseEvent) => {
+      draggingRef.current = true
+      drag(e)
+    },
+    [drag]
+  )
+  const stopDragging = useCallback(() => (draggingRef.current = false), [])
+
   return (
-    <svg ref={svgRef} viewBox={`-${margin} -${margin} ${width + 2 * margin} ${height + 2 * margin}`}>
+    <svg ref={svgRef} viewBox={`-${marginX} -${marginY} ${width + 2 * marginX} ${height + 2 * marginY}`}>
       <FillLine points={fillLinePoints.join(' ')} />
       <MainLine points={mainLinePoints.join(' ')} />
 
-      <ClickInterceptor
-        x={-margin}
-        y={-margin}
-        width={width + 2 * margin}
-        height={height + 2 * margin}
-        onClick={onClick}
-      />
+      <SliderIndicator x1={sliderX} y1={-marginY} x2={sliderX} y2={height + marginY} />
 
-      <SliderIndicator x1={sliderX} y1={-margin} x2={sliderX} y2={height + margin} />
+      <ClickInterceptor
+        x={-marginX}
+        y={-marginY}
+        width={width + 2 * marginX}
+        height={height + 2 * marginY}
+        onMouseDown={startDragging}
+        onMouseUp={stopDragging}
+        onMouseLeave={stopDragging}
+        onMouseMove={drag}
+      />
     </svg>
   )
 }

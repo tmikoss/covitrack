@@ -58,9 +58,9 @@ export const Visuals = () => {
         <Stars fade factor={10} radius={GLOBE_RADIUS * 3.2} />
         <ambientLight />
 
-        {countries}
-
         <InnerSphere />
+
+        {countries}
 
         <ClickDetectorSphere />
 
