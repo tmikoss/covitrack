@@ -51,7 +51,7 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
   const max = Math.max(...values(countryData))
 
   const width = differenceInDays(maxDate, minDate)
-  const height = width / 10
+  const height = width / 20
 
   const baseDate = new Date()
 
@@ -92,7 +92,7 @@ export const Sparkline: React.FC<{ country: string; setAnimationSpeed: (speed: n
       setFocusDate(addDays(minDate, clamp(Math.floor(x), 0, width)))
       setAnimationSpeed(0)
     },
-    [minDate, setFocusDate, setAnimationSpeed]
+    [minDate, setFocusDate, setAnimationSpeed, width]
   )
 
   const startDragging = useCallback(

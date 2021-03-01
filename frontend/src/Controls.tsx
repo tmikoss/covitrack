@@ -27,8 +27,8 @@ const Container = styled.div`
   @media only screen and (max-width: 600px) {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      'slider slider'
-      'date avg';
+      'date avg'
+      'slider slider';
   }
 `
 
@@ -36,10 +36,6 @@ const ControlsContainer = styled.div`
   grid-area: slider;
   display: flex;
   flex-flow: row;
-`
-
-const Slider = styled.input`
-  flex: 1;
 `
 
 const GraphContainer = styled.div`
@@ -131,14 +127,6 @@ export const Controls = () => {
     }, 100)
     return () => clearInterval(interval)
   }, [focusDate, animationSpeed])
-
-  const max = differenceInDays(maxDate, minDate)
-  const value = differenceInDays(focusDate, minDate)
-
-  const onChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-    setAnimationSpeed(0)
-    setFocusDate(addDays(minDate, parseInt(value)))
-  }
 
   const setReverse = useCallback(() => setAnimationSpeed((speed) => NEXT_REVERSE_SPEED[speed]), [])
   const setForward = useCallback(() => setAnimationSpeed((speed) => NEXT_FORWARD_SPEED[speed]), [])
